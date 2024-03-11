@@ -58,23 +58,22 @@ taxes = [
 ]
 
 
-def employers_info(key, key2=None):  # функция выводит список со значениями переданного ключа в списке employers
+def employers_info(key1, key2=None):
     value_list = []
-    for value in departments:
-        department_title = value["title"]
-        for v in value["employers"]:
-            if key2 is None:
-                name = v[key]
-                value_list.append(name)
-            if key2 == "title":
-                name_department = v[key] + " (" + department_title + ")"
-                value_list.append(name_department)
-            if key2 == "salary_rub":
-                name = v["first_name"]
-                salary = v["salary_rub"]
-                value_list.append({"name": name, "salary": salary})
+    try:
+        for one_dep in departments:
+            department_title = one_dep["title"]
+            for worker in one_dep["employers"]:
+                if key2 is None:
+                    value = worker[key1]
+                    value_list.append(value)
+                elif key2 == "title":
+                    name_department = worker[key1] + " (" + department_title + ")"
+                    value_list.append(name_department)
+    except KeyError:
+        return ["Ошибка! Ключ задан неверно"]
     return value_list
-print(employers_info("first_name", "salary_rub"))
+
 
 # 1. Вывести названия всех отделов
 print("Названия отделов:", ', '.join(department["title"] for department in departments))
@@ -86,11 +85,10 @@ print("Имена всех сотрудников компании:", ', '.join(
 print("Имена всех сотрудников компании с указанием отдела:", ', '.join(employers_info("first_name", "title")))
 
 # 4. Вывести имена всех сотрудников компании, которые получают больше 100к.
-names = [item["name"] for item in (employers_info("first_name", "salary_rub")) if item["salary"] > 100000]
-print(names)
+print(", ".join(f"Зарплата: {n} {s}" for n, s in zip(employers_info("first_name"), employers_info("salary_rub"))
+                if s > 100000))
 
-
-
+# 5. Вывести позиции, на которых люди получают меньше 80к (можно с повторениями).
 
 
 
