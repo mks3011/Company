@@ -58,7 +58,7 @@ taxes = [
 ]
 
 
-def employers_info(key1, key2=None):
+def employers_info(key1, key2=None):  # функция выводит все значения по ключу для отдела
     value_list = []
     try:
         for one_dep in departments:
@@ -75,6 +75,14 @@ def employers_info(key1, key2=None):
     return value_list
 
 
+def get_salaries_by_department():  # функция для вывода зарплатной информации по отделам
+    result = {}
+    for one_dep in departments:
+        department_name = one_dep["title"]
+        result[department_name] = [employer["salary_rub"] for employer in one_dep["employers"]]
+    return result
+
+
 # 1. Вывести названия всех отделов
 print("Названия отделов:", ', '.join(department["title"] for department in departments))
 
@@ -85,12 +93,71 @@ print("Имена всех сотрудников компании:", ', '.join(
 print("Имена всех сотрудников компании с указанием отдела:", ', '.join(employers_info("first_name", "title")))
 
 # 4. Вывести имена всех сотрудников компании, которые получают больше 100к.
-print(", ".join(f"Зарплата: {n} {s}" for n, s in zip(employers_info("first_name"), employers_info("salary_rub"))
-                if s > 100000))
+up_100 = ", ".join(f"{n} ({s})" for n, s in zip(employers_info("first_name"), employers_info("salary_rub")) if s > 100000)
+print(f"Зарплата больше 100к: {up_100}")
 
 # 5. Вывести позиции, на которых люди получают меньше 80к (можно с повторениями).
+low_80 = ", ".join(f"{n} ({s})" for n, s in zip(employers_info("position"), employers_info("salary_rub")) if s < 80000)
+print(f"Зарплата меньше 80к: {low_80}")
+
+for department, salaries in get_salaries_by_department().items():
+    min_salary = min(salaries)
+    max_salary = max(salaries)
+    sum_salary = sum(salaries)
+    avg_salary = sum(salaries) / len(salaries)
+# 6. Посчитать, сколько денег в месяц уходит на каждый отдел – и вывести вместе с названием отдела
+    print(f"Сумма зарплат в отделе {department}: {sum_salary} рублей")
+# 7. Вывести названия отделов с указанием минимальной зарплаты в нём.
+    print(f"Минимальная зарплата в отделе {department}: {min_salary} рублей")
+# 8. Вывести названия отделов с указанием минимальной, средней и максимальной зарплаты в нём.
+    print(f"Зарплата в отделе {department}:"
+          f" минимальная {min_salary}, средняя {avg_salary}, максимальная {max_salary} рублей")
+
+# 9. Вывести среднюю зарплату по всей компании.
+print("Средняя зарплата по всей компании:", sum(employers_info("salary_rub"))/len(employers_info("first_name")))
+
+# 10. Вывести названия должностей, которые получают больше 90к без повторений.
+up_90 = ", ".join({pos for pos, sal in zip(employers_info("position"), employers_info("salary_rub")) if sal > 90000})
+print(f"Должности с зарплатой больше 90000: {up_90}")
+
+# 11. Посчитать среднюю зарплату по каждому отделу среди девушек (их зовут Мишель, Николь, Кристина и Кейтлин).
+male_staff = {"Daniel", "Kevin", "Brian"}
+female_staff = {"Michelle", "Nicole", "Christina", "Caitlin"}
+female_salaries_all = \
+    [sal for name, sal in zip(employers_info("first_name"), employers_info("salary_rub")) if name in female_staff]
+print(sum(female_salaries_all) / len(female_salaries_all))
 
 
+
+
+# 12. Вывести без повторений имена людей, чьи фамилии заканчиваются на гласную букву.
+vowels = ['a', 'e', 'i', 'o', 'u']
+# print("Имена всех сотрудников компании:", ', '.join(employers_info("first_name")) if (employers_info("last_name")[-1] in vowels)
+# vov = ", ".join(f"{n} ({s})" for n, s in zip(employers_info("first_name"), employers_info("last_name")) if (employers_info("last_name")[-1] in vowels))
+# print(f"Зарпк: {vov}")
+# print(employers_info("last_name")[-1])
+
+#
+# print(employers_info("first_name"))
+# print(employers_info("last_name"))
+# employers_data = zip(employers_info("first_name"), employers_info("last_name"))
+# up = (f"{n} {s}" for n, s in employers_data if s[-1].lower() in ['a', 'e', 'i', 'o', 'u'])
+# print(f"Зарплата у тех, у кого фамилия заканчивается на гласную: {up}")
+
+
+name = ['Daniel', 'Michelle', 'Kevin', 'Nicole', 'Christina', 'Michelle', 'Caitlin', 'Brian']
+last_name = ['Berger', 'Frey', 'Jimenez', 'Riley', 'Walker', 'Gilbert', 'Bradley', 'Hartman']
+vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
+qwe = list(zip(name, last_name))
+print(qwe)
+up = []
+for n, s in list(zip(name, last_name)):
+    print(s)
+    if s[-1] in ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']:
+        print(n)
+        up.append(n)
+
+print(f"Зарплата у тех, у кого фамилия заканчивается на гласную: {up}")
 
 # # 1. Вывести названия всех отделов
 # for department in departments:
