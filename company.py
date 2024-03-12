@@ -57,6 +57,10 @@ taxes = [
     {"department": "BizDev Department", "name": "sales", "value_percents": 20},
 ]
 
+male_staff = {"Daniel", "Kevin", "Brian"}
+female_staff = {"Michelle", "Nicole", "Christina", "Caitlin"}
+vowels = {"a", "e", "i", "o", "u", "y"}
+
 
 def employers_info(key1, key2=None):  # функция выводит все значения по ключу для отдела
     value_list = []
@@ -75,11 +79,24 @@ def employers_info(key1, key2=None):  # функция выводит все з�
     return value_list
 
 
-def get_salaries_by_department():  # функция для вывода зарплатной информации по отделам
+# def get_salaries_by_department():  # функция для вывода зарплатной информации по отделам
+#     result = {}
+#     for one_dep in departments:
+#         department_name = one_dep["title"]
+#         result[department_name] = [employer["salary_rub"] for employer in one_dep["employers"]]
+#     return result
+
+
+def get_average_salaries_for_gender_staff(key=None):
     result = {}
-    for one_dep in departments:
-        department_name = one_dep["title"]
-        result[department_name] = [employer["salary_rub"] for employer in one_dep["employers"]]
+    for dept in departments:
+        department_name = dept["title"]
+        if key is None:
+            result[department_name] = [emp["salary_rub"] for emp in dept["employers"]]
+        else:
+            female_salaries = [emp["salary_rub"] for emp in dept["employers"] if emp["first_name"] in key]
+            average_salary = sum(female_salaries) / len(female_salaries)
+            result[department_name] = round(average_salary)
     return result
 
 
@@ -100,7 +117,7 @@ print(f"Зарплата больше 100к: {up_100}")
 low_80 = ", ".join(f"{n} ({s})" for n, s in zip(employers_info("position"), employers_info("salary_rub")) if s < 80000)
 print(f"Зарплата меньше 80к: {low_80}")
 
-for department, salaries in get_salaries_by_department().items():
+for department, salaries in get_average_salaries_for_gender_staff().items():
     min_salary = min(salaries)
     max_salary = max(salaries)
     sum_salary = sum(salaries)
@@ -121,14 +138,8 @@ up_90 = ", ".join({pos for pos, sal in zip(employers_info("position"), employers
 print(f"Должности с зарплатой больше 90000: {up_90}")
 
 # 11. Посчитать среднюю зарплату по каждому отделу среди девушек (их зовут Мишель, Николь, Кристина и Кейтлин).
-male_staff = {"Daniel", "Kevin", "Brian"}
-female_staff = {"Michelle", "Nicole", "Christina", "Caitlin"}
-female_salaries_all = \
-    [sal for name, sal in zip(employers_info("first_name"), employers_info("salary_rub")) if name in female_staff]
-print(sum(female_salaries_all) / len(female_salaries_all))
-
-
-
+avg_gender = get_average_salaries_for_gender_staff(female_staff)
+print("Средняя зарплата среди девушек в " + ", ".join(f"{key}: {value}" for key, value in avg_gender.items()))
 
 # 12. Вывести без повторений имена людей, чьи фамилии заканчиваются на гласную букву.
 vowels = ['a', 'e', 'i', 'o', 'u']
@@ -144,20 +155,16 @@ vowels = ['a', 'e', 'i', 'o', 'u']
 # up = (f"{n} {s}" for n, s in employers_data if s[-1].lower() in ['a', 'e', 'i', 'o', 'u'])
 # print(f"Зарплата у тех, у кого фамилия заканчивается на гласную: {up}")
 
-
-name = ['Daniel', 'Michelle', 'Kevin', 'Nicole', 'Christina', 'Michelle', 'Caitlin', 'Brian']
-last_name = ['Berger', 'Frey', 'Jimenez', 'Riley', 'Walker', 'Gilbert', 'Bradley', 'Hartman']
-vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
-qwe = list(zip(name, last_name))
-print(qwe)
-up = []
-for n, s in list(zip(name, last_name)):
-    print(s)
-    if s[-1] in ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']:
-        print(n)
-        up.append(n)
-
-print(f"Зарплата у тех, у кого фамилия заканчивается на гласную: {up}")
+#
+# name = ['Daniel', 'Michelle', 'Kevin', 'Nicole', 'Christina', 'Michelle', 'Caitlin', 'Brian']
+# last_name = ['Berger', 'Frey', 'Jimenez', 'Riley', 'Walker', 'Gilbert', 'Bradley', 'Hartman']
+# VOWELS = {"a", "e", "i", "o", "u", "y"}
+# for department in departments:
+#     for employer in department["employers"]:
+#         if employer["last_name"][-1].lower() in VOWELS:
+#             vowel_employers.append(employer["first_name"])
+#
+# print(f"Зарплата у тех, у кого фамилия заканчивается на гласную: {up}")
 
 # # 1. Вывести названия всех отделов
 # for department in departments:
