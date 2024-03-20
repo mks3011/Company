@@ -157,7 +157,8 @@ for department in departments:
 
 for department in departments:
     for employer in department["employers"]:
-        print(f"{employer['first_name']} {employer['last_name']} - зарплата 'на руки' {employer['salary_rub']}, с учетом налогов: {employer['salary_after_taxes_rub']}")
+        print(f"{employer['first_name']} {employer['last_name']} - зарплата с учетом налогов {employer['salary_rub']},"
+              f" зарплата 'на руки': {employer['salary_after_taxes_rub']}")
 
 # 15. Вывести список отделов, отсортированный по месячной налоговой нагрузки.
 # 16. Вывести всех сотрудников, за которых компания платит больше 100к налогов в год.
